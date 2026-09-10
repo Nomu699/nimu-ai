@@ -3,7 +3,6 @@ const configured=!cfg.SUPABASE_URL.includes("YOUR_")&&!cfg.SUPABASE_PUBLISHABLE_
 const supabase=configured?window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_PUBLISHABLE_KEY):null;
 const $=id=>document.getElementById(id); const chat=$("chat"), input=$("input"), form=$("chatForm");
 let history=[], signup=false, demo=!configured;
-
 function add(role,text){const row=document.createElement("div");row.className="row "+role;const box=document.createElement("div");box.className="bubble";box.textContent=text;row.appendChild(box);if(role==="ai"){const tools=document.createElement("div");tools.className="tools";const b=document.createElement("button");b.textContent="🔊";b.title="Read aloud";b.onclick=()=>speak(text);tools.appendChild(b);row.appendChild(tools)}chat.appendChild(row);chat.scrollTop=chat.scrollHeight}
 function typing(){const row=document.createElement("div");row.className="row ai";row.id="typing";row.innerHTML='<div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div>';chat.appendChild(row);chat.scrollTop=chat.scrollHeight}
 function speak(t){if("speechSynthesis"in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.96;u.pitch=1.06;speechSynthesis.speak(u)}}
