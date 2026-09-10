@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>nimu.ai — Your AI Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div>
+<div id="auth" class="modal">
+  <div class="auth-card">
+    <div class="brand big">nimu<span>.ai</span></div>
+    <p class="muted">A private space for your AI companion.</p>
+    <div class="tabs"><button id="loginTab" class="active">Log in</button><button id="signupTab">Create account</button></div>
+    <form id="authForm">
+      <input id="email" type="email" placeholder="Email" required>
+      <input id="password" type="password" placeholder="Password" minlength="8" placeholder="Password" required>
+      <button class="primary" id="authSubmit">Log in</button>
+    </form>
+    <p id="authMsg" class="msg"></p>
+    <button id="demoBtn" class="ghost">Continue without account</button>
+  </div>
+</div>
+
+<div class="shell">
+<header>
+  <div class="brand">nimu<span>.ai</span></div>
+  <div class="top-actions"><span id="userBadge" class="badge">Guest</span><button id="logout" class="icon-btn" title="Log out">↪</button></div>
+</header>
+
+<main>
+  <aside>
+    <div class="profile">
+      <div class="avatar">N</div><div><strong>Nimu</strong><small><i></i> Online</small></div>
+    </div>
+    <div class="side-card"><span>MEMORY</span><p id="memoryStatus">Sign in to keep your conversations across devices.</p></div>
+    <div class="side-card"><span>VOICE</span><p>Tap the mic to speak. Tap 🔊 on a reply to hear Nimu.</p></div>
+  </aside>
+  <section class="chat-wrap">
+    <div id="chat" class="chat">
+      <div class="hero"><div class="hero-avatar">N</div><h1>Hey, I'm Nimu. <em>I'm listening.</em></h1><p>Real AI. Voice chat. Long-term memory.</p>
+      <div class="chips"><button>Tell me something interesting ✨</button><button>Let's talk in Banglish 💗</button><button>Make me laugh 😂</button></div></div>
+    </div>
+    <form id="chatForm" class="composer">
+      <button type="button" id="mic" class="round" title="Voice input">🎙️</button>
+      <input id="input" placeholder="Message Nimu..." autocomplete="off">
+      <button type="submit" id="send" class="send">➤</button>
+    </form>
+  </section>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
