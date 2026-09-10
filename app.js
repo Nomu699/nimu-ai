@@ -38,6 +38,7 @@ function add(role, text) {
     tools.className = "tools";
 
     const button = document.createElement("button");
+    button.type = "button";
     button.textContent = "🔊";
     button.title = "Read aloud";
     button.onclick = () => speak(text);
@@ -65,13 +66,13 @@ function typing() {
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
 
-  speechSynthesis.cancel();
+  window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = 0.96;
   utterance.pitch = 1.06;
 
-  speechSynthesis.speak(utterance);
+  window.speechSynthesis.speak(utterance);
 }
 
 async function getSession() {
@@ -93,10 +94,8 @@ async function refresh() {
   if (session) {
     $("auth").style.display = "none";
     $("userBadge").textContent = session.user.email;
-
     $("memoryStatus").textContent =
       "Memory is on. Your conversations can follow you across sessions.";
-
     $("logout").style.display = "block";
 
     await loadHistory();
@@ -113,11 +112,14 @@ async function loadHistory() {
   if (!session) return;
 
   try {
-    const response = await fetch("/.netlify/functions/history", {
-      headers: {
-        Authorization: "Bearer " + session.access_token
+    const response = await fetch(
+      "/.netlify/functions/history",
+      {
+        headers: {
+          Authorization: "Bearer " + session.access_token
+        }
       }
-    });
+    );
 
     const data = await response.json();
 
@@ -125,7 +127,8 @@ async function loadHistory() {
       document.querySelector(".hero")?.remove();
 
       data.messages.forEach((message) => {
-        const role = message.role === "assistant" ? "ai" : "user";
+        const role =
+          message.role === "assistant" ? "ai" : "user";
 
         add(role, message.content);
 
@@ -166,7 +169,6 @@ $("authForm").onsubmit = async (event) => {
   if (!supabase) {
     $("authMsg").textContent =
       "Supabase is not configured yet.";
-
     return;
   }
 
@@ -200,11 +202,15 @@ $("authForm").onsubmit = async (event) => {
   }
 };
 
-$("demoBtn").onclick = () => {
+$("demoBtn").onclick = (event) => {
+  event.preventDefault();
+
   $("auth").style.display = "none";
 
   $("memoryStatus").textContent =
     "Guest mode: memory stays only in this browser session.";
+
+  input.focus();
 };
 
 $("logout").onclick = async () => {
@@ -215,15 +221,17 @@ $("logout").onclick = async () => {
   location.reload();
 };
 
-document.querySelectorAll(".chips button").forEach((button) => {
-  button.onclick = () => {
-    input.value = button.textContent
-      .replace(/[✨💗😂]/g, "")
-      .trim();
+document
+  .querySelectorAll(".chips button")
+  .forEach((button) => {
+    button.onclick = () => {
+      input.value = button.textContent
+        .replace(/[✨💗😂]/g, "")
+        .trim();
 
-    input.focus();
-  };
-});
+      input.focus();
+    };
+  });
 
 form.onsubmit = async (event) => {
   event.preventDefault();
@@ -242,7 +250,6 @@ form.onsubmit = async (event) => {
   });
 
   input.value = "";
-
   $("send").disabled = true;
 
   typing();
@@ -287,7 +294,6 @@ form.onsubmit = async (event) => {
       role: "assistant",
       content: data.reply
     });
-
   } catch (error) {
     $("typing")?.remove();
 
@@ -297,7 +303,6 @@ form.onsubmit = async (event) => {
     );
 
     console.error("Chat error:", error);
-
   } finally {
     $("send").disabled = false;
     input.focus();
@@ -313,7 +318,6 @@ $("mic").onclick = () => {
     alert(
       "Voice input is not supported in this browser."
     );
-
     return;
   }
 
@@ -327,6 +331,13 @@ $("mic").onclick = () => {
       event.results[0][0].transcript;
 
     input.focus();
+  };
+
+  recognition.onerror = (error) => {
+    console.error(
+      "Voice input error:",
+      error
+    );
   };
 
   recognition.start();
